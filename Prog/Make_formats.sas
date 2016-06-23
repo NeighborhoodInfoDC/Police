@@ -10,9 +10,10 @@
  Description:  Make formats for Police data library.
 
  Modifications:
+    06/22/16 RMP  Added new uievent values.
 **************************************************************************/
 
-%include "K:\Metro\PTatian\DCData\SAS\Inc\Stdhead.sas";
+%include "L:\SAS\Inc\StdLocal.sas";
 
 ** Define libraries **;
 %DCData_lib( Police )
@@ -37,6 +38,8 @@ proc format library=Police;
     25      =      'SEX ABUSE C2-CHILD 2ND'
 	26      =      'SEX ABUSE AWIC 1ST'
 	27      =      'SEX ABUSE ATTEMPT 1ST'
+	28		=	   'SEX ABUSE'
+	29		= 	   'ROBBERY-OTHER'
     30      =      'ROBBERY-GUN'
     31      =      'ROBBERY-KNIFE'
     32      =      'ROBBERY-OTHER ARMED'
@@ -55,7 +58,11 @@ proc format library=Police;
     51      =      'BURGLARY-1'
     52      =      'BURGLARY-2'
     53      =      'BURGLARY-ATTEMPT'
-    60      =      'THEFT-1'
+	54		=	   'BURGLARY-OTHER'
+	57		=	   'THEFT-GUN'
+	58		=	   'THEFT-KNIFE'
+	59		= 	   'THEFT-OTHER'
+	60      =      'THEFT-1'
     61      =      'THEFT-2'
     62      =      'THEFT-ATTEMPT'
     63      =      'THEFT-SHOPLIFTING'
@@ -63,8 +70,10 @@ proc format library=Police;
     66      =      'THFT F/AUTO-1'
     67      =      'THFT F/AUTO-2'
     68      =      'THFT F/AUTO-ATTEMPT'
+	69		=	   'THFT F/AUTO-OTHER'
     70      =      'STOLEN AUTO--'
     71      =      'STOLEN AUTO-ATTEMPT'
+	72 		=	   'STOLEN AUTO-OTHER'
     80      =      'ARSON--'
     ;
 
@@ -84,10 +93,13 @@ proc format library=Police;
     111 = 'Sexual assault/adult 2'
     112 = 'Sexual assault/adult 3'
     113 = 'Sexual assault/adult 4'
+	114 = 'Sexual assult/gun'
+	114.1 = 'Sexual assault/knife'
     115 = 'Sexual assault/child 1'
     116 = 'Sexual assault/child 2'
 	117 = 'Sexual assault/awic 1'
 	118 = 'Sexual assault/attempt 1'
+	119 = 'Sexual assault/other'
     
     120 = 'Robbery/gun'
     121 = 'Robbery/knife'
@@ -101,6 +113,7 @@ proc format library=Police;
     129 = 'Robbery/attempt'
     130 = 'Robbery/car jacking'
     131 = 'Robbery/stealth'
+	132 = 'Robbery/other'
 
     140 = 'Aggravated assault'
     141 = 'Aggravated assault/gun'
@@ -111,6 +124,9 @@ proc format library=Police;
     150 = 'Burglary/1'
     151 = 'Burglary/2'
     152 = 'Burglary/attempt'
+	153 = 'Burglary/other'
+	154 = 'Burglary/gun'
+	155 = 'Burglary/knife'
 
     160 = 'Theft/1'
     161 = 'Theft/2'
@@ -120,30 +136,43 @@ proc format library=Police;
     165 = 'Theft/bicycle'
     166 = 'Theft/mail'
     167 = 'Theft/tags'
+	168 = 'Theft/other'
+	169 = 'Theft/gun'
+	169.1 = 'Theft/knife'
     170 = 'Theft from auto/1'
     171 = 'Theft from auto/2'
     172 = 'Theft from auto/attempt'
-    180 = 'Stolen auto'
+	173 = 'Theft from auto/other'
+	174 = 'Theft from auto/gun'
+	175 = 'Theft from auto/knife'
+
+	180 = 'Stolen auto'
     181 = 'Stolen auto/attempt'
-    190 = 'Arson'
+	182 = 'Stolen auto/other'
+	183 = 'Stolen auto/gun'
+	184 = 'Stolen auto/knife'
+
+	190 = 'Arson'
 
     200 = 'Assault/simple'
     201 = 'Assault/threats'
-    241 = 'Property destruction/$200 or less'
+
+	241 = 'Property destruction/$200 or less'
     242 = 'Property destruction/over $200'
-    300 = 'Interstate Recovery';
+
+	300 = 'Interstate Recovery';
     
 	
   ** UI event code summary format **;
 	
   value uievsum
     100-109 = 'Homicide'
-    110-116 = 'Sexual assault'
-    120-131 = 'Robbery'
+    110-119 = 'Sexual assault'
+    120-132 = 'Robbery'
     140-149 = 'Aggravated assault'
-    150-152 = 'Burglary'
-    160-172 = 'Larceny/theft'
-    180-181 = 'Stolen auto'
+    150-155 = 'Burglary'
+    160-175 = 'Larceny/theft'
+    180-184 = 'Stolen auto'
     190     = 'Arson'
     200-201 = 'Simple assault'
     241-242 = 'Property destruction'
