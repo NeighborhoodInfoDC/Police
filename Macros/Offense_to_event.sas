@@ -18,6 +18,7 @@
                 Stolen Auto.
                 Added Asphyxiation to Homicide, other. 
   06/08/12 RMP  Added Attempted assualt and animal cruetly.
+  06/22/16 RMP  Added new ui_event codes based on new OCTO method values.
 **************************************************************************/
 
 /** Macro Offense_to_event - Start Definition **/
@@ -49,7 +50,7 @@
     event = '10';
     ui_event = 104;
   end;
-  else if offense='Homicide' and method in ( 'Other', 'Asphyxiation' ) then do;
+  else if offense='Homicide' and method in ( 'Other','Others', 'Asphyxiation' ) then do;
     event = '10';
     ui_event = 108;
   end;
@@ -89,6 +90,18 @@
   else if offense ='Sex Abuse' and method in ( 'Attempt 1st Degree' ) then do;
     event = '27';
     ui_event = 118;
+  end;
+    else if offense ='Sex Abuse' and method in ( 'Other','Others' ) then do;
+    event = '28';
+    ui_event = 119;
+  end;
+   else if offense ='Sex Abuse' and method in ( 'Gun' ) then do;
+    event = '28';
+    ui_event = 114;
+  end;
+  else if offense ='Sex Abuse' and method in ( 'Knife' ) then do;
+    event = '28';
+    ui_event = 114.1;
   end;
   
   else if offense ='Robbery' and method='Assault W/Intent' then do;
@@ -139,6 +152,10 @@
     event = '3x';
     ui_event = 131;
   end;
+   else if offense ='Robbery' and method in ('Other','Others') then do;
+    event = '29';
+    ui_event = 132;
+  end;
 
   else if offense='Assault' and method='Aggravated Assault' then do;
     event = '4x';
@@ -156,7 +173,7 @@
     event = '43';
     ui_event = 143;
   end;
-  else if offense='Adw' and method='Other' then do;
+  else if offense='Adw' and method in ('Other','Others') then do;
     event = '40';
     ui_event = 149;
   end;
@@ -172,6 +189,18 @@
   else if offense ='Burglary' and method=:'Attemp' then do;
     event = '53';
     ui_event = 152;
+  end;
+    else if offense ='Burglary' and method in ('Other','Others') then do;
+    event = '54';
+    ui_event = 153;
+  end;
+  else if offense ='Burglary' and method in ('Gun') then do;
+    event = '54';
+    ui_event = 154;
+  end;
+  else if offense ='Burglary' and method in ('Knife') then do;
+    event = '54';
+    ui_event = 155;
   end;
 
   else if offense ='Theft' and method in ( 'One', '1', '1 Armed' ) then do;
@@ -206,6 +235,18 @@
     event = '6x';
     ui_event = 167;
   end;
+  else if offense ='Theft' and method in ('Other','Others') then do;
+    event = '59';
+    ui_event = 168;
+  end;
+ else if offense ='Theft' and method in ('Gun') then do;
+    event = '57';
+    ui_event = 169;
+  end;
+ else if offense ='Theft' and method in ('Knife') then do;
+    event = '58';
+    ui_event = 169.1;
+  end;
 
   else if offense ='Theft F/Auto' and method in ( 'One', '1' ) then do;
     event = '66';
@@ -219,6 +260,18 @@
     event = '68';
     ui_event = 172;
   end;
+    else if offense ='Theft F/Auto' and  method in ('Other','Others') then do;
+    event = '69';
+    ui_event = 173;
+  end;
+   else if offense ='Theft F/Auto' and  method in ('Gun') then do;
+    event = '69';
+    ui_event = 174;
+  end;
+  else if offense ='Theft F/Auto' and  method in ('Knife') then do;
+    event = '69';
+    ui_event = 175;
+  end;
   
   else if offense in ( 'Stolen Auto', 'Theft F/Auto' ) and method='Stolen Auto' then do;
     event = '70';
@@ -228,8 +281,20 @@
     event = '71';
     ui_event = 181;
   end;
+  else if offense ='Stolen Auto' and method in ('Other','Others') then do;
+    event = '72';
+    ui_event = 182;
+  end;
+  else if offense ='Stolen Auto' and method in ('Gun') then do;
+    event = '72';
+    ui_event = 183;
+  end;
+  else if offense ='Stolen Auto' and method in ('Knife') then do;
+    event = '72';
+    ui_event = 184;
+  end;
 
-  else if offense ='Arson' and method='Arson' then do;
+  else if offense ='Arson' and method in ('Arson','Other','Others') then do;
     event = '80';
     ui_event = 190;
   end;
