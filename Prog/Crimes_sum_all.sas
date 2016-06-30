@@ -33,13 +33,13 @@
 **rsubmit;
 
 /** Change to N for testing, Y for final batch mode run **/
-%let register = Y;
+%let register = N;
 
 /** Update with information on latest file revision **/
 %let revisions = %str(Updated for new 2010/2012 geos.);
 
 /** Update with latest crime data year **/
-%let end_yr = 2011;
+%let end_yr = 2015;
 
 
 /** Macro Crimes_sum_geo - Start Definition **/

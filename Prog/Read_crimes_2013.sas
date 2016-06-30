@@ -1,17 +1,14 @@
 /**************************************************************************
- Program:  Add_geo_crimes_2012.sas
+ Program:  Read_crimes_2013.sas
  Library:  Police
  Project:  NeighborhoodInfo DC
- Author:   Rob Pitingolo
- Created:  05/24/12
- Version:  SAS 9.2
+ Author:   Mychal Cohen
+ Created:  06/22/16
+ Version:  SAS 9.4
  Environment:  Windows 7
  
- Description:  Add geography variables to raw crime report data.
- Need to add: tract, cluster (tract-based), ZIP code, casey target areas, EOR.
+ Description:  Read in preliminary crime report data from MPD.
  
- Year = 2012.
-
  Modifications:
 **************************************************************************/
 
@@ -19,7 +16,8 @@
 
 ** Define libraries **;
 %DCData_lib( Police )
-%DCData_lib( RealProp )
 
+%Read_crimes(
+  year = 2013
+)
 
-%Add_geo_crimes_shp( year=2012 )
