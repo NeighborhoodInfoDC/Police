@@ -18,6 +18,7 @@
 %DCData_lib( Police )
 
 %Read_crimes(
-  year = 2012
+  year = 2012,
+  revisions=%str(Correct previous data input problems.)
 )
 
