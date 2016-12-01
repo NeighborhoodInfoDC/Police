@@ -1,8 +1,8 @@
 /**************************************************************************
- Program:  Read_crimes_2012.sas
+ Program:  Read_crimes_2015.sas
  Library:  Police
  Project:  NeighborhoodInfo DC
- Author:   Rob Pitingolo
+ Author:   Mychal Cohen
  Created:  06/22/16
  Version:  SAS 9.4
  Environment:  Windows 7
@@ -18,7 +18,6 @@
 %DCData_lib( Police )
 
 %Read_crimes(
-  year = 2012,
-  revisions=%str(Correct previous data input problems.)
+  year = 2015
 )
 
