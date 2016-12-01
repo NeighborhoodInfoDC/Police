@@ -33,13 +33,13 @@
 **rsubmit;
 
 /** Change to N for testing, Y for final batch mode run **/
-%let register = Y;
+%let register = N;
 
 /** Update with information on latest file revision **/
 %let revisions = %str(Updated for new 2010/2012 geos.);
 
 /** Update with latest crime data year **/
-%let end_yr = 2011;
+%let end_yr = 2015;
 
 
 /** Macro Crimes_sum_geo - Start Definition **/
@@ -60,6 +60,7 @@
   %let sum_vars_wc = Crimes_: ;
 
   %let geo = %upcase( &geo );
+
 
   %if %sysfunc( putc( &geo, $geoval. ) ) ~= %then %do;
     %let geosuf = %sysfunc( putc( &geo, $geosuf. ) );
@@ -155,10 +156,17 @@
     end;
     
     ** Check for invalid geography values **;
-    
+
+	/* Fix city format and check for other bad formats*/
+	%if &geo = CITY %then %do;
+	format city $CITY16. ;
+	%end;
+
+	%else %do;
     if missing( put( &geo, &geovfmt ) ) then do;
       %err_put( macro=Crimes_sum_geo, msg="Invalid geography value: " _n_= &geo= )
     end;
+	%end;
     
     drop i;
     
@@ -193,7 +201,6 @@
 
 %Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions, register=&register )
@@ -206,6 +213,7 @@
 %Crimes_sum_geo( geo=ward2012, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=ZIP, end_yr=&end_yr, revisions=&revisions, register=&register )
 %Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions, register=&register )
+%Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions, register=&register )
 
 run;
 
