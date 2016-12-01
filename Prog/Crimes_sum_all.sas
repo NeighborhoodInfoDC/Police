@@ -24,19 +24,14 @@
                Added summary for voterpre2012.
 **************************************************************************/
 
-%include "F:\DCData\SAS\Inc\StdRemote.sas";
+%include "L:\SAS\Inc\StdLocal.sas";
 
 ** Define libraries **;
 %DCData_lib( Police )
 %DCData_lib( NCDB )
 
-**rsubmit;
-
-/** Change to N for testing, Y for final batch mode run **/
-%let register = N;
-
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated for new 2010/2012 geos.);
+%let revisions = %str(Updated with data for 2012 - 2015.);
 
 /** Update with latest crime data year **/
 %let end_yr = 2015;
@@ -44,11 +39,9 @@
 
 /** Macro Crimes_sum_geo - Start Definition **/
 
-%macro Crimes_sum_geo( geo=, start_yr=2000, end_yr=, revisions=, register=N );
+%macro Crimes_sum_geo( geo=, start_yr=2000, end_yr=, revisions= );
 
   %local sum_vars sum_vars_wc geosuf geodlbl geofmt geovfmt i var;
-
-  %let register = %upcase( &register );
 
   %let sum_vars = 
     Crimes_pt1 Crimes_pt1_homicide Crimes_pt1_sexual
@@ -145,7 +138,7 @@
 
   %Pop_option( compress )
 
-  data Police.Crimes_sum&geosuf (label="Preliminary part 1 crime summary, DC, &geodlbl" sortedby=&geo);
+  data Crimes_sum&geosuf;
 
     set All_crimes_geo_tr;
     
@@ -172,24 +165,18 @@
     
   run;
 
-  /**x "purge [dcdata.police.data]Crimes_sum&geosuf..*";**/
+  %Finalize_data_set(
+    data=Crimes_sum&geosuf,
+    out=Crimes_sum&geosuf,
+    outlib=Police,
+    label="Preliminary part 1 crime summary, DC, &geodlbl",
+    sortby=&geo,
+    /** Metadata parameters **/
+    revisions=%str(&revisions),
+    /** File info parameters **/
+    printobs=0
+  )
 
-  %File_info( data=Police.Crimes_sum&geosuf, printobs=0 )
-  
-  %if &register = Y %then %do;
-
-    ** Register in metadata **;
-    
-    %Dc_update_meta_file(
-      ds_lib=Police,
-      ds_name=Crimes_sum&geosuf,
-      creator_process=Crimes_sum_all.sas,
-      restrictions=None,
-      revisions=%str(&revisions)
-    )
-    
-  %end;
-  
   %exit_macro:
 
 %mend Crimes_sum_geo;
@@ -199,25 +186,21 @@
 
 *options mlogic;
 
-%Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=GEOBLK2000, end_yr=&end_yr, revisions=&revisions, register=&register )
-/***NOT YET IN ALL FILES***%Crimes_sum_geo( geo=GEOBLK2010, end_yr=&end_yr, revisions=&revisions, register=&register )***/
-%Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=ward2002, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=ward2012, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=ZIP, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions, register=&register )
-%Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions, register=&register )
+%Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=GEOBLK2000, end_yr=&end_yr, revisions=&revisions )
+/***NOT YET IN ALL FILES***%Crimes_sum_geo( geo=GEOBLK2010, end_yr=&end_yr, revisions=&revisions )***/
+%Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ward2002, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ward2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ZIP, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
 
 run;
-
-**endrsubmit;
-
-**signoff;
 

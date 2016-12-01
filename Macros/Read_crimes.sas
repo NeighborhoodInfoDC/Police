@@ -21,7 +21,7 @@
 
 /** Macro Read_crimes - Start Definition **/
 
-%macro Read_crimes( year=, path= );
+%macro Read_crimes( year=, path=, revisions=New file. );
 
   %local MAX_ROWS ds_lbl freqvars ;
 
@@ -35,7 +35,7 @@
   %if &year < 2007 %then %let ds_lbl = Preliminary part 1 & 2 crime reports, &year, DC;
   %else %let ds_lbl = Preliminary part 1 crime reports, &year, DC;
 
-  data Police.Crimes_&year. (label="&ds_lbl");
+  data Crimes_&year.;
 
     %if &year < 2007 %then %do;
     
@@ -217,11 +217,9 @@
       
       %Block00_to_zip( )
       
-      ** Casey geographies **;
+      %Block00_to_eor( )
       
-      %Tr00_to_eor( )
-      %Tr00_to_cta03( )
-      %Tr00_to_cnb03( )
+      %Block00_to_vp12( )
       
     end;
     
@@ -312,23 +310,17 @@
     filename xlsfile clear;
   %end;
 
-  proc sort data=Police.Crimes_&year.;
-    by reportdate Start_Time;
-
-  %File_info( 
-    data=Police.Crimes_&year., 
-    printobs=5,
-    freqvars=&freqvars )
-
-  proc freq data=Police.Crimes_&year.;
+  proc freq data=Crimes_&year.;
     tables 
       reportdate start_time 
       event * offense * method 
       ui_event * offense * method 
       / missing list;
     format start_time hhmm. reportdate mmyys7.;
+    label reportdate = 'Date of reported crime incident - formatted as month/year';
+  run;
 
-  proc tabulate data=Police.Crimes_&year. format=comma12.0 missing noseps;
+  proc tabulate data=Crimes_&year. format=comma12.0 missing noseps;
       where 100 <= ui_event <= 199;
       class offense ui_event;
       table all='Total' offense=' ', n='Number of Crimes' pctn='Percent of Crimes' /rts=45 box='MPD offense codes';
@@ -337,6 +329,19 @@
       title2;
       title3 "Reported Part 1 Crimes, &year";
   run;
+
+  %Finalize_data_set(
+    data=Crimes_&year.,
+    out=Crimes_&year.,
+    outlib=Police,
+    label="&ds_lbl",
+    sortby=reportdate Start_Time,
+    /** Metadata parameters **/
+    revisions=%str(&revisions),
+    /** File info parameters **/
+    printobs=5,
+    freqvars=&freqvars
+  )
   
   %exit_macro:
 
