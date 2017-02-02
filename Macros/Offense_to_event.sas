@@ -426,7 +426,7 @@
   
   label
     event = 'MPD event code (type of crime, pt. 1 only)'
-    ui_event = 'UI event code (type of crime, pts. 1 & 2)';
+    ui_event = 'NIDC event code (type of crime, pts. 1 & 2)';
     
   format event $tcpevt. ui_event uievent.;
 
