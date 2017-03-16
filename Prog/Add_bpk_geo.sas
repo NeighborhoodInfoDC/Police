@@ -28,7 +28,7 @@
 
 %let revisions = Added Bridge Park Geography. ;
 
-%let freqvars = offense method shift location status code
+%let freqvars = offense method location ui_event
                 district psa2004_district 
                 city psa psa2004 psa2012 ward ward2002 ward2012 
                 anc2002 anc2012 cluster2000 cluster_tr2000 
