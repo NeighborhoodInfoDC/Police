@@ -31,9 +31,10 @@
 
 %macro web_varcreate;
 
-Crimes_pt1_per1000 = crimes_pt1 / Crime_rate_pop*1000;
 Crimes_pt1_property_per1000 = Crimes_pt1_property / Crime_rate_pop*1000;
 Crimes_pt1_violent_per1000 = Crimes_pt1_violent / Crime_rate_pop*1000;
+
+drop crimes_pt1 Crimes_pt1_property Crimes_pt1_violent Crime_rate_pop;
 
 %mend web_varcreate;
 
@@ -51,12 +52,6 @@ data &sumdata._&geo._long_allyr;
 	%web_varcreate;
 run;
 
-/* Output all-years CSV */
-ods csv file ="&_dcdata_default_path.\web\output\&outfolder.\&geo.\&outfolder._&geo._AllYears.csv";
-	proc print data = &sumdata._&geo._long_allyr noobs;
-	run;
-ods csv close;
-
 
 /*Subset datasets by year */
 %do j = &start. %to &end.;
@@ -64,7 +59,6 @@ data &sumdata._&geo._long_&j. ;
 	set &sumdata._&geo._long_allyr;
 	where timeframe ="&j." ;
 run;
-%runquit;
 
 
 /* Output each year as a separate CSV */
