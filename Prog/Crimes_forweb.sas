@@ -36,6 +36,9 @@ Crimes_pt1_violent_per1000 = Crimes_pt1_violent / Crime_rate_pop*1000;
 
 drop crimes_pt1 Crimes_pt1_property Crimes_pt1_violent Crime_rate_pop;
 
+label Crimes_pt1_violent_per1000 = "Violent Crimes (per 1,000 pop.)"
+	  Crimes_pt1_property_per1000 = "Property Crimes (per 1,000 pop.)";
+
 %mend web_varcreate;
 
 
@@ -50,6 +53,9 @@ drop crimes_pt1 Crimes_pt1_property Crimes_pt1_violent Crime_rate_pop;
 data &sumdata._&geo._long_allyr;
 	set &sumdata._&geo._long;
 	%web_varcreate;
+	label start_date = "Start Date"
+		  end_date = "End Date"
+		  timeframe = "Year of Data";
 run;
 
 
@@ -59,6 +65,18 @@ data &sumdata._&geo._long_&j. ;
 	set &sumdata._&geo._long_allyr;
 	where timeframe ="&j." ;
 run;
+
+
+/* Create metadata for the dataset */
+proc contents data = &sumdata._&geo._long_allyr out = &sumdata._&geo._metadata noprint;
+run;
+
+
+/* Output the metadata */
+ods csv file ="&_dcdata_default_path.\web\output\&outfolder.\&geo.\&outfolder._&geo._metadata..csv";
+	proc print data =&sumdata._&geo._metadata noobs;
+	run;
+ods csv close;
 
 
 /* Output each year as a separate CSV */
@@ -78,3 +96,4 @@ ods csv close;
 %csv_create (city);
 %csv_create (psa12);
 %csv_create (zip);
+
