@@ -222,6 +222,8 @@
       %Block00_to_vp12( )
 
 	  %Block00_to_bpk( )
+
+	  %Block00_to_cluster17( )
       
     end;
     
