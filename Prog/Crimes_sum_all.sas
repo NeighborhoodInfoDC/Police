@@ -208,6 +208,7 @@
 %Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
 
 run;
 
