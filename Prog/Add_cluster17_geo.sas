@@ -26,7 +26,7 @@
 %if &year < 2007 %then %let ds_lbl = Preliminary part 1 & 2 crime reports, &year, DC;
 %else %let ds_lbl = Preliminary part 1 crime reports, &year, DC;
 
-%let revisions = Added Bridge Park Geography. ;
+%let revisions = Added Cluster2017 Geography. ;
 
 %let freqvars = offense method location ui_event
                 district psa2004_district 
