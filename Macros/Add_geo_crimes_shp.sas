@@ -15,7 +15,7 @@
 
 /** Macro Add_geo_crimes_shp - Start Definition **/
 
-%macro Add_geo_crimes_shp( year= );
+%macro Add_geo_crimes_shp( year=);
 
 %let drop_list = fid_1 fid_2 fullarea shape_area shape_leng Cnt_cjrTra start_date end_date ;
 
@@ -25,7 +25,12 @@
 %File_info( 
   data=Police.crime_incidents_&year._w_block, 
   printobs=0, 
+  %if &year. = 2017 %then %do;
+  freqvars=method offense shift ward district psa anc neighborho bid 
+  %end;
+  %else %do;
   freqvars=method offense shift ward district psa anc neighborho businessim 
+  %end;
 )
 
 proc format;
@@ -48,13 +53,23 @@ data block ;
          Cjrtractbl $ 9 district cluster $ 2 psa $ 3 ward $ 1
          BID Hotspot2004 Hotspot2005 Hotspot2006 $ 40;
 
-  set Police.crime_incidents_&year._w_block 
+  set Police.crime_incidents_&year._w_block
+    %if &year. = 2017 %then %do;
+       (drop=&drop_list latitude longitude
+        rename=(ccn=x_ccn district=x_district report_dat=ch_reportdate 
+                neighborho=ch_neighborho
+                ward=ch_ward anc=x_anc psa=ch_psa block=x_blocksitea
+				XBLOCK=latitude YBLOCK=longitude objectid=nid));
+  %end;
+
+  %else %do;
        (drop=&drop_list
         rename=(BUSINESSIM=BID 
                 ccn=x_ccn district=x_district reportdate=ch_reportdate 
                 lastmodifi=ch_lastmodifi neighborho=ch_neighborho
                 ward=ch_ward anc=x_anc psa=ch_psa BLOCKSITEA=x_blocksitea
 				BLOCKXCOOR=latitude BLOCKYCOOR=longitude objectid=nid));
+  %end;
 
   /* Fix vars coded as character in shapefile */
   x_neighborho = ch_neighborho + 0;
@@ -111,6 +126,23 @@ data block ;
   if not( missing( x_psa ) ) then psa = put( x_psa, 3. );
   if not( missing( x_ward ) ) then ward = put( x_ward, 1. );
      
+  %if &year. = 2017 %then %do;
+  select( upcase( x_district ) );
+    when ( '1' ) district = '1D';
+    when ( '2' ) district = '2D';
+    when ( '3' ) district = '3D';
+    when ( '4' ) district = '4D';
+    when ( '5' ) district = '5D';
+    when ( '6' ) district = '6D';
+    when ( '7' ) district = '7D';
+    when ( '' ) district = '';
+    otherwise do;
+      %err_put( msg='Invalid DISTRICT code: ' _n_= ccn= ' DISTRICT=' x_district )
+    end;
+  end;
+  %end;
+
+ %else %do;
   select( upcase( x_district ) );
     when ( 'FIRST' ) district = '1D';
     when ( 'SECOND' ) district = '2D';
@@ -124,6 +156,7 @@ data block ;
       %err_put( msg='Invalid DISTRICT code: ' _n_= ccn= ' DISTRICT=' x_district )
     end;
   end;
+  %end;
     
   x_blocksitea = left( compbl( x_blocksitea ) );
     
@@ -142,7 +175,7 @@ data block ;
 run;
 
 
-data Police.crime_incidents_raw_&year.;
+data crime_incidents_raw_&year.;
 
   set block (in=in1);
   
@@ -186,8 +219,21 @@ data Police.crime_incidents_raw_&year.;
 
 run;
 
-    
-%file_info( data=Police.crime_incidents_raw_&year., freqvars=geo_source method offense shift ward district psa Anc smd cluster hotsp: BID )
+%Finalize_data_set( 
+/** Finalize data set parameters **/
+data=crime_incidents_raw_&year.,
+out=crime_incidents_raw_&year.,
+outlib=police,
+label="Crime data with block &year.",
+sortby=ccn,
+/** Metadata parameters **/
+restrictions=None,
+revisions=%str(New file),
+/** File info parameters **/
+printobs=5,
+freqvars=district ward anc
+);  
+
 
 %mend Add_geo_crimes_shp;
 
