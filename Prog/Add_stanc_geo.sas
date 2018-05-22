@@ -1,5 +1,5 @@
 /**************************************************************************
- Program:  Add_cluster17_geo.sas
+ Program:  Add_stanc_geo.sas
  Library:  Police
  Project:  NeighborhoodInfo DC
  Author:   Yipeng Su
@@ -21,7 +21,7 @@
 
 %macro addstantoncommons (year);
 
-%do year = 2000 %to 2017;
+%do year = 2000 %to 2016;
 
 %if &year < 2007 %then %let ds_lbl = Preliminary part 1 & 2 crime reports, &year, DC;
 %else %let ds_lbl = Preliminary part 1 crime reports, &year, DC;
@@ -53,8 +53,8 @@ run;
   )
 
 %end;
-%mend addstanc;
-%addstanc;
+%mend addstantoncommons;
+%addstantoncommons;
 
 
 /* End of Program */
