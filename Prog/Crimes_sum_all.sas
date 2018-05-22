@@ -23,6 +23,7 @@
   03/30/14 PAT Updated for new SAS1 server.
                Added summary for voterpre2012.
   03/30/17 RP Updated for 2016 data. 
+  05/16/18 YS Update for stantoncommons geography
 **************************************************************************/
 
 %include "L:\SAS\Inc\StdLocal.sas";
@@ -209,6 +210,6 @@
 %Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
-
+%Crimes_sum_geo( geo=stantoncommons, end_yr=&end_yr, revisions=&revisions )
 run;
 
