@@ -168,7 +168,7 @@
 
 	/* Need to remove MD and VA tracts from tract files */
 	%if &geo = GEO2000 or &geo = GEO2010 %then %do;
-	st = substr(geo2010,1,2);
+	st = substr(&geo.,1,2);
 	if st="11";
 	drop st;
 	%end;
