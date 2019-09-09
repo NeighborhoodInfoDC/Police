@@ -33,10 +33,6 @@
 %DCData_lib( NCDB )
 
 
-/** Change to N for testing, Y for final batch mode run **/
-%let register = N;
-
-
 /** Update with information on latest file revision **/
 %let revisions = %str(Updated with data for 2017.);
 
