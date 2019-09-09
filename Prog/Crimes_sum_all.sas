@@ -33,10 +33,6 @@
 %DCData_lib( NCDB )
 
 
-/** Change to N for testing, Y for final batch mode run **/
-%let register = N;
-
-
 /** Update with information on latest file revision **/
 %let revisions = %str(Updated with data for 2017.);
 
@@ -169,6 +165,13 @@
 	%end;
     
     drop i;
+
+	/* Need to remove MD and VA tracts from tract files */
+	%if &geo = GEO2000 or &geo = GEO2010 %then %do;
+	st = substr(&geo.,1,2);
+	if st="11";
+	drop st;
+	%end;
     
   run;
 
