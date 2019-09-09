@@ -25,7 +25,7 @@
 %File_info( 
   data=Police.crime_incidents_&year._w_block, 
   printobs=0, 
-  %if &year. = 2017 %then %do;
+  %if &year. >= 2017 %then %do;
   freqvars=method offense shift ward district psa anc neighborho bid 
   %end;
   %else %do;
@@ -54,7 +54,7 @@ data block ;
          BID Hotspot2004 Hotspot2005 Hotspot2006 $ 40;
 
   set Police.crime_incidents_&year._w_block
-    %if &year. = 2017 %then %do;
+    %if &year. >= 2017 %then %do;
        (drop=&drop_list latitude longitude
         rename=(ccn=x_ccn district=x_district report_dat=ch_reportdate 
                 neighborho=ch_neighborho
@@ -126,7 +126,7 @@ data block ;
   if not( missing( x_psa ) ) then psa = put( x_psa, 3. );
   if not( missing( x_ward ) ) then ward = put( x_ward, 1. );
      
-  %if &year. = 2017 %then %do;
+  %if &year. >= 2017 %then %do;
   select( upcase( x_district ) );
     when ( '1' ) district = '1D';
     when ( '2' ) district = '2D';
