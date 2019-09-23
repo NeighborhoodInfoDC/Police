@@ -34,10 +34,10 @@
 
 
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated with data for 2017.);
+%let revisions = %str(Updated with data for 2018.);
 
 /** Update with latest crime data year **/
-%let end_yr = 2017;
+%let end_yr = 2018;
 
 
 /** Macro Crimes_sum_geo - Start Definition **/
