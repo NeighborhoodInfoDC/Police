@@ -224,6 +224,8 @@
 	  %Block00_to_bpk( )
 
 	  %Block00_to_cluster17( )
+
+	  %Block00_to_stantoncommons( )
       
     end;
     
