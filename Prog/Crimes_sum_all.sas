@@ -24,9 +24,10 @@
                Added summary for voterpre2012.
   03/30/17 RP Updated for 2016 data. 
   05/16/18 YS Update for stantoncommons geography
+  12/23/2020 ALH update for 2019 data
 **************************************************************************/
 
-%include "L:\SAS\Inc\StdLocal.sas";
+%include "\\sas1\DCdata\SAS\Inc\StdLocal.sas";
 
 ** Define libraries **;
 %DCData_lib( Police )
@@ -34,10 +35,10 @@
 
 
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated with data for 2018.);
+%let revisions = %str(Updated with data for 2019.);
 
 /** Update with latest crime data year **/
-%let end_yr = 2018;
+%let end_yr = 2019;
 
 
 /** Macro Crimes_sum_geo - Start Definition **/
