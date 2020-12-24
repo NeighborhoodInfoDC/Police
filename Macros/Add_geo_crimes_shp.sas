@@ -54,7 +54,15 @@ data block ;
          BID Hotspot2004 Hotspot2005 Hotspot2006 $ 40;
 
   set Police.crime_incidents_&year._w_block
-    %if &year. >= 2017 %then %do;
+  %if &year. >= 2019 %then %do;
+       (drop=&drop_list latitude longitude
+        rename=(ccn=x_ccn district=x_district
+                neighborho=ch_neighborho
+                ward=ch_ward anc=x_anc psa=ch_psa block=x_blocksitea
+				XBLOCK=latitude YBLOCK=longitude objectid=nid));
+  %end;
+
+  %else %if &year. >= 2017 %then %do;
        (drop=&drop_list latitude longitude
         rename=(ccn=x_ccn district=x_district report_dat=ch_reportdate 
                 neighborho=ch_neighborho
@@ -104,9 +112,16 @@ data block ;
   shift = upcase( left( shift ) );
   if shift = 'UNK' then shift = '';
   if shift = 'EVE' then shift = 'EVN';
+
+  %if &year. >= 2019 %then %do;
+  Reportdate = report_dat; 
+  drop report_dat;
+  %end;
   
+  %else %do;
   Reportdate = input( x_reportdate, yymmdd10. );
   LastModifiedDt = input( x_lastmodifi, yymmdd10. );
+  %end;
   
   format Reportdate LastModifiedDt yymmdd10.;
 
