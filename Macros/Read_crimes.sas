@@ -31,6 +31,9 @@
     ***filename xlsfile dde "excel|&path\[Clean_&year..xls]Sheet1!r2c1:r&MAX_ROWS.c20" lrecl=2000 notab;
     filename xlsfile "&path\Clean_&year..txt" lrecl=2000;
   %end;
+  %else %if &year >= 2020 %then %do;
+    filename xfile "&_dcdata_r_path\Police\Raw\Crime_Incidents_in_&year..csv";
+  %end;
   
   %if &year < 2007 %then %let ds_lbl = Preliminary part 1 & 2 crime reports, &year, DC;
   %else %let ds_lbl = Preliminary part 1 crime reports, &year, DC;
@@ -99,7 +102,7 @@
       drop fipsstco;
 
     %end;
-    %else %if &year >= 2007 %then %do;
+    %else %if &year <= 2019 %then %do;
     
       set Police.crime_incidents_raw_&year.;
 
@@ -146,12 +149,100 @@
         
     %end;
     %else %do;
+    
+      %** 2020 or later **;
+
+      infile xfile missover dsd dlm='09'x firstobs=2 lrecl=1000;
+
+      ** Input statement for before 2007 **;
+    
+      input 
+        ccn  : $9.
+        offense : $40.
+        method : $40.
+        start_date : mmddyy.
+        start_hour
+        end_date : mmddyy.
+        shift : $3.
+        block : $80.
+        location : $40.
+        district : $1.
+        psa : $3.
+        ward : $1.
+        status : $40.
+        code : $2.
+        reportdate : mmddyy.
+        id 
+        fipsstco : $5.
+        tract2000 : $6.
+        block2000 : $4.
+        GeoBlk2000 : $15.   /** Column STFID in spreadsheet **/
+        
+        
+      ;
       
-      %err_mput( macro=Read_crimes, msg=Unsupported year: YEAR=&year.. )
-      %goto exit_macro;
+      input
+        X
+        Y
+        CCN : $9. 
+        xREPORT_DAT : $40.
+        xSHIFT : $40.
+        METHOD : $40.
+        OFFENSE : $40.
+        BLOCK : $40.
+        XBLOCK 
+        YBLOCK
+        WARD : $2.
+        ANC : $4.
+        DISTRICT : $4.
+        PSA : $4.
+        NEIGHBORHOOD_CLUSTER : $12.
+        BLOCK_GROUP : $12.
+        CENSUS_TRACT : $8.
+        VOTING_PRECINCT : $12.
+        LATITUDE
+        LONGITUDE
+        BID : $8.
+        xSTART_DATE : $40.
+        xEND_DATE : $40.
+        OBJECTID : $20.
+        OCTO_RECORD_ID : $20.
+      ;
+      
+      %let freqvars = offense method shift location status code
+                      district psa2004_district 
+                      city psa psa2004 psa2012 ward ward2002 ward2012 
+                      anc2002 anc2012 cluster2000 cluster_tr2000 
+                      zip geo2000 geo2010;
+    
+      format End_Date Start_Date reportdate MMDDYY10.;
+    
+      label 
+        CCN='Criminal complaint number'
+        Offense='Type of offense'
+        Method='Method of crime (weapon)'
+        Start_Date='Report start date (DO NOT USE - USE REPORTDATE INSTEAD)'
+        Start_Hour='Report start hour'
+        End_Date='Report end date (DO NOT USE - USE REPORTDATE INSTEAD)'
+        Shift='Shift'
+        BLOCK='Street address of crime'
+        Location='Location of crime'
+        district='Police district'
+        PSA='MPD Police Service Area (MPD supplied, 2004)'
+        ward = 'Ward (MPD supplied)'
+        Status= 'Crime investigation status'
+        Code='Unknown variable'
+        reportdate = 'Date of reported crime'
+        ID='Unknown'
+        tract2000 = 'Census tract ID (MPD supplied, 2000): tttttt'
+        BLOCK2000='Census block ID (MPD supplied, 2000): bbbb'
+        geoblk2000='Full census block ID (2000): sscccttttttbbbb';
+        
+      drop fipsstco;
       
     %end;
-      
+
+%MACRO SKIP;
     ** Record Number **;
      
     RecordNo = _N_;
@@ -335,6 +426,9 @@
       title2;
       title3 "Reported Part 1 Crimes, &year";
   run;
+
+%MEND SKIP;
+RUN;
 
   %Finalize_data_set(
     data=Crimes_&year.,
