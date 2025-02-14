@@ -17,8 +17,9 @@
 
 ** Define libraries **;
 %DCData_lib( Police )
+%DCData_lib( MAR )
 
-%Read_crimes(
+%Read_crimes_2020(
   year = 2020
 )
 
