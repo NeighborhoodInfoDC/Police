@@ -26,16 +26,9 @@
 
   %local MAX_ROWS ds_lbl freqvars ;
 
-  %let MAX_ROWS = 50000;
+  %let MAX_ROWS = 500000;
   
-  %let freqvars = 
-         offense method shift location status code
-         district psa2004_district 
-         city psa psa2004 psa2012 ward ward2002 ward2012 
-         anc2002 anc2012 cluster2000 cluster_tr2000 
-         zip geo2000 geo2010;
-                      
-  %LET FREQVARS = XSHIFT METHOD OFFENSE ward2022;
+  %let freqvars = SHIFT METHOD OFFENSE ward2022;
 
   filename xfile "&_dcdata_r_path\Police\Raw\Crime_Incidents_in_&year..csv";
   
@@ -55,7 +48,7 @@
       xSHIFT : $40.
       METHOD : $40.
       OFFENSE : $40.
-      BLOCK : $40.
+      Location : $80.
       XBLOCK 
       YBLOCK
       WARD : $2.
@@ -94,7 +87,7 @@
   goptions reset=global border;
 
   proc ginside includeborder dropmapvars
-    data=Crimes_input (keep=ccn block block_group latitude longitude rename=(latitude=y longitude=x)) 
+    data=Crimes_input (keep=ccn Location block_group latitude longitude rename=(latitude=y longitude=x)) 
     map=Blocks_2020
     out=Crimes_input_ginside;
     id geocode;
@@ -111,8 +104,8 @@
     
     address = 
       catx( ' ',
-            scan( block, 1 ), 
-            substr( block, index( upcase( block ), "BLOCK OF" ) + 8 )
+            scan( Location, 1 ), 
+            substr( Location, index( upcase( Location ), "BLOCK OF" ) + 8 )
           );
   
   run;
@@ -144,9 +137,14 @@
       Reporttime = input( scan( REPORT_DAT, 2, ' +' ), time10. );
       
       Start_date = input( scan( START_DATE_orig, 1, ' ' ), yymmdd10. );
-      if not( missing( END_DATE_orig ) ) then End_date = input( scan( END_DATE_orig, 1, ' ' ), yymmdd10. );
+      Start_time = input( scan( START_DATE_orig, 2, ' +' ), time10. );
+      
+      if not( missing( END_DATE_orig ) ) then do;
+        End_date = input( scan( END_DATE_orig, 1, ' ' ), yymmdd10. );
+        End_time = input( scan( END_DATE_orig, 2, ' +' ), time10. );
+      end;
     
-      format End_Date Start_Date reportdate MMDDYY10. reporttime time8.;
+      format reportdate Start_Date End_Date MMDDYY10. reporttime Start_time End_time time8.;
     
       label 
         CCN='Criminal complaint number'
@@ -156,25 +154,31 @@
         End_Date_orig='Original report end date + time field'
         Start_Date='Report start date (USE REPORTDATE INSTEAD)'
         End_Date='Report end date (USE REPORTDATE INSTEAD)'
+        Start_time='Report start time'
+        End_time='Report end time'
         Shift='Shift'
-        BLOCK='Street address of crime'
-        Location='Location of crime'
+        Location='Crime incident location (block/intersection)'
         district='Police district'
-        PSA='MPD Police Service Area (MPD supplied, 2004)'
-        ward = 'Ward (MPD supplied)'
-        Status= 'Crime investigation status'
-        Code='Unknown variable'
+        PSA='MPD Police Service Area (from source data)'
+        ward = 'Ward (from source data)'
         REPORT_DAT = 'Original reported date + time field'
         reportdate = 'Date of reported crime'
         reporttime = 'Time of reported crime'
-        ID='Unknown'
-        tract2000 = 'Census tract ID (MPD supplied, 2000): tttttt'
-        BLOCK2000='Census block ID (MPD supplied, 2000): bbbb'
-        geoblk2000='Full census block ID (2000): sscccttttttbbbb';
+        ANC = "Advisory Neighborhood Commmission (ANC, from source data)"
+        BID = "Business Improvement District (from source data)"        
+        BLOCK_GROUP = "Census block group (from source data)"
+        CENSUS_TRACT = "Census tract (from source data)"
+        LATITUDE = "Latitude of crime block"
+        LONGITUDE = "Longitude of crime block"
+        NEIGHBORHOOD_CLUSTER = "Neighborhood cluster (from source data)"
+        OBJECTID = "ObjectID from source data"
+        VOTING_PRECINCT = "Voting precinct (from source data)"
+        X = "Longitude of crime block (MD State Plane, NAD 1983 meters)"
+        XBLOCK = "Longitude of crime block (MD State Plane, NAD 1983 meters)"
+        Y = "Latitude of crime block (MD State Plane, NAD 1983 meters)"
+        YBLOCK = "Latitude of crime block (MD State Plane, NAD 1983 meters)"
+    ;
              
-      drop OCTO_RECORD_ID;
-     
-
     ** Record Number **;
      
     RecordNo = _N_;
@@ -226,11 +230,20 @@
     
     ** Police district **;
 
-    length Psa2004_district $ 2;
+    length Psa2019_district $ 2;
 
-    if psa2004 ~= '' then psa2004_district = substr( psa2004, 1, 1 ) || 'D';
+    if psa2019 ~= '' then psa2019_district = substr( psa2019, 1, 1 ) || 'D';
+    
+    ** Recoded vars **;
+    
+    length Shift $ 3;
+    
+    select ( upcase( xShift ) );
+      when ( 'DAY' ) Shift = 'DAY';
+      when ( 'EVENING' ) Shift = 'EVN'; 
+      when ( 'MIDNIGHT' ) Shift = 'MID';
+    end;
 
-%MACRO SKIP;   
     ******  CRIME CODES  ******;
 
     ** Create EVENT and EVENT_N codes for types of crimes **;
@@ -268,7 +281,7 @@
       sum( Crimes_pt1_burglary, Crimes_pt1_theft, Crimes_pt1_auto, Crimes_pt1_arson );
 
     label
-      PSA2004_district = 'MPD Police District (2004)'
+      PSA2019_district = 'MPD Police District (2019)'
       Start_Time='Report start time'
       reportdate_yr = 'Year of reported crime'
       Crimes_pt1 = "Total part 1 crimes"
@@ -283,27 +296,29 @@
       Crimes_pt1_violent = "Violent crimes"
       Crimes_pt1_property = "Property crimes";
 
-      format
-        ward2002 $ward02a.
-        psa2004 $psa04a.
-        reportdate mmddyy10.;
-
-    drop i;
+    drop i xShift;
 
   run;
 
-  %if &year < 2007 %then %do;
-    filename xlsfile clear;
-  %end;
-
+  %Finalize_data_set(
+    data=Crimes_&year.,
+    out=Crimes_&year.,
+    outlib=Police,
+    label="&ds_lbl",
+    sortby=ccn,
+    /*******sortby=reportdate Start_Time,************/
+    /** Metadata parameters **/
+    revisions=%str(&revisions),
+    /** File info parameters **/
+    printobs=10,
+    freqvars=&freqvars
+  )
+  
   proc freq data=Crimes_&year.;
     tables 
-      reportdate start_time 
       event * offense * method 
       ui_event * offense * method 
       / missing list;
-    format start_time hhmm. reportdate mmyys7.;
-    label reportdate = 'Date of reported crime incident - formatted as month/year';
   run;
 
   proc tabulate data=Crimes_&year. format=comma12.0 missing noseps;
@@ -316,23 +331,6 @@
       title3 "Reported Part 1 Crimes, &year";
   run;
 
-%MEND SKIP;
-RUN;
-
-  %Finalize_data_set(
-    data=Crimes_&year.,
-    out=Crimes_&year.,
-    outlib=Police,
-    label="&ds_lbl",
-    sortby=ccn,
-    /*******sortby=reportdate Start_Time,************/
-    /** Metadata parameters **/
-    revisions=%str(&revisions),
-    /** File info parameters **/
-    printobs=5,
-    freqvars=&freqvars
-  )
-  
   %exit_macro:
 
   title2;

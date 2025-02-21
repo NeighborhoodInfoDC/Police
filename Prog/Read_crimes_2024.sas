@@ -1,5 +1,5 @@
 /**************************************************************************
- Program:  Read_crimes_2020.sas
+ Program:  Read_crimes_2024.sas
  Library:  Police
  Project:  Urban-Greater DC
  Author:   P. Tatian
@@ -17,6 +17,7 @@
 
 ** Define libraries **;
 %DCData_lib( Police )
+%DCData_lib( MAR )
 
 %Read_crimes_2020(
   year = 2024
