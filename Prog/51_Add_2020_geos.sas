@@ -56,12 +56,6 @@ data Blk_xwalk_2000_2020;
 
 run;
 
-/*
-proc print data=Blk_xwalk_2000_2020 (obs=200);
-  var cjrTractBl GEOID GeoBlk: ;
-run;
-*/
-
 proc sort data=Blk_xwalk_2000_2020 nodupkey;
   by GeoBlk2000 GeoBlk2020;
 run;
