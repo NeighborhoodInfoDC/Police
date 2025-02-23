@@ -35,7 +35,7 @@
 
 
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated with data for 2019.);
+%let revisions = %str(Updated with data through 2024.);
 
 /** Update with latest crime data year **/
 %let end_yr = 2024;
@@ -83,6 +83,8 @@
         Police.Crimes_&i (keep=reportdate_yr &geo &sum_vars)
       %end;
     ;
+    
+    where &start_yr <= reportdate_yr <= &end_yr;
     
   run;
 
@@ -207,6 +209,7 @@
 %Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions )
+/*** NEED TO CREATE NCDB FILES *** %Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions ) ****/
 %Crimes_sum_geo( geo=GEOBLK2020, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions )
@@ -219,5 +222,6 @@
 %Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=stantoncommons, end_yr=&end_yr, revisions=&revisions )
+
 run;
 
