@@ -227,6 +227,7 @@
     %Block20_to_ward02()
     %Block20_to_ward12()
     %Block20_to_ward22()
+    %Block20_to_zip()
     
     ** Police district **;
 
