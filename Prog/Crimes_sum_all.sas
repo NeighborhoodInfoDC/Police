@@ -209,7 +209,7 @@
 %Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions )
-/*** NEED TO CREATE NCDB FILES *** %Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions ) ****/
+/*** NEED TO CREATE NCDB SUMMRY FILES FOR GEO2020 *** %Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions ) ****/
 %Crimes_sum_geo( geo=GEOBLK2020, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions )
@@ -221,7 +221,6 @@
 %Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=stantoncommons, end_yr=&end_yr, revisions=&revisions )
 
 run;
 
