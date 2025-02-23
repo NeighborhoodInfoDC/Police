@@ -35,10 +35,10 @@
 
 
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated with data for 2019.);
+%let revisions = %str(Updated with data through 2024.);
 
 /** Update with latest crime data year **/
-%let end_yr = 2019;
+%let end_yr = 2024;
 
 
 /** Macro Crimes_sum_geo - Start Definition **/
@@ -83,7 +83,8 @@
         Police.Crimes_&i (keep=reportdate_yr &geo &sum_vars)
       %end;
     ;
-    by reportdate_yr;
+    
+    where &start_yr <= reportdate_yr <= &end_yr;
     
   run;
 
@@ -98,7 +99,7 @@
 
   %** Do not add population var for block-level summaries **;
 
-  %if &geo ~= GEOBLK2000 and &geo ~= GEOBLK2010 %then %do;
+  %if &geo ~= GEOBLK2000 and &geo ~= GEOBLK2010 and &geo ~= GEOBLK2020 %then %do;
   
     ** Add Census population **;
     
@@ -107,7 +108,8 @@
       merge 
         All_crimes_geo 
         Ncdb.Ncdb_sum&geosuf (keep=&geo TotPop_2000)
-        Ncdb.Ncdb_sum_2010&geosuf (keep=&geo TotPop_2010);
+        Ncdb.Ncdb_sum_2010&geosuf (keep=&geo TotPop_2010)
+        Ncdb.Ncdb_sum_2020&geosuf (keep=&geo TotPop_2020);
       by &geo;
       
       if reportdate_yr <= 2000 then 
@@ -115,7 +117,10 @@
       else if 2000 < reportdate_yr < 2010 then 
         Crime_rate_pop = round( TotPop_2000 + ( ( TotPop_2010 - TotPop_2000 ) * 
                          ( ( reportdate_yr - 2000 ) / ( 2010 - 2000 ) ) ) );
-      else Crime_rate_pop = TotPop_2010;
+      else if 2010 <= reportdate_yr < 2020 then
+        Crime_rate_pop = round( TotPop_2010 + ( ( TotPop_2020 - TotPop_2010 ) * 
+                         ( ( reportdate_yr - 2010 ) / ( 2020 - 2010 ) ) ) );
+      else Crime_rate_pop = TotPop_2020;
       
       label
         Crime_rate_pop = "Population for calculating crime rates (est.)";
@@ -126,7 +131,7 @@
   
   ** Transpose data by year **;
   
-  %if &geo ~= GEOBLK2000 and &geo ~= GEOBLK2010 %then %let var = &sum_vars Crime_rate_pop;
+  %if &geo ~= GEOBLK2000 and &geo ~= GEOBLK2010 and &geo ~= GEOBLK2020 %then %let var = &sum_vars Crime_rate_pop;
   %else %let var = &sum_vars;
 
   %Super_transpose(  
@@ -198,22 +203,24 @@
 *options mlogic;
 
 %Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions )
+/*****
 %Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=GEOBLK2000, end_yr=&end_yr, revisions=&revisions )
-/***NOT YET IN ALL FILES***%Crimes_sum_geo( geo=GEOBLK2010, end_yr=&end_yr, revisions=&revisions )***/
+/*** NEED TO CREATE NCDB SUMMRY FILES FOR GEO2020 *** %Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions ) ****/
+%Crimes_sum_geo( geo=GEOBLK2020, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ward2002, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ward2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ward2022, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ZIP, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=stantoncommons, end_yr=&end_yr, revisions=&revisions )
+
 run;
 
