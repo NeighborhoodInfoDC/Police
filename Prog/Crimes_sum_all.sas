@@ -203,7 +203,6 @@
 *options mlogic;
 
 %Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions )
-/*****
 %Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
