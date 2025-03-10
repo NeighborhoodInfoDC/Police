@@ -1,5 +1,5 @@
 /**************************************************************************
- Program:  Crimes_sum_all.sas
+ Program:  Crimes_sum_all_2.sas
  Library:  Police
  Project:  NeighborhoodInfo DC
  Author:   P. Tatian
@@ -8,6 +8,8 @@
  Environment:  Remote Windows session (SAS1)
  
  Description:  Summarize crime data by all geographies.
+ 
+ Complete rest of geographies after Crimes_sum_all.sas failed to run entirely.
 
  Modifications:
   01/04/06  Added Census 2000 population (Crime_rate_pop) for calculating 
