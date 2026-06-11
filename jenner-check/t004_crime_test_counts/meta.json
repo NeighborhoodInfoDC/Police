@@ -1,0 +1,8 @@
+{
+  "bundle": "t004_crime_test_counts",
+  "source_file": "Prog/Crime_test_counts.sas",
+  "source_blob_sha": "d16c662fb1a93273a5db32a796b5a2d334f666a5",
+  "source_commit": "000eae99ac96a4ae38ea33eb9fd609e455a73fd0",
+  "tier": "real_data",
+  "notes": "PROC MEANS (N, SUM with explicit VAR=crimes_pt1) on TCAP year samples + PROC FREQ on raw event codes."
+}

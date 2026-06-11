@@ -1,0 +1,47 @@
+Jenner 0.1.0 (Unlicensed - limited to 100 observations)
+Get a license at https://jenneranalytics.com/license
+
+NOTE: Option OBS changed to 100.
+NOTE: DATA crimes_2000_dc
+
+NOTE: Processing inline DATALINES (4 lines)
+
+NOTE: Read 4 rows from DATALINES.
+NOTE: Wrote crimes_2000_dc (4 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA crimes_2001_dc
+
+NOTE: Processing inline DATALINES (4 lines)
+
+NOTE: Read 4 rows from DATALINES.
+NOTE: Wrote crimes_2001_dc (4 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA crimes_2002_dc
+
+NOTE: Processing inline DATALINES (4 lines)
+
+NOTE: Read 4 rows from DATALINES.
+NOTE: Wrote crimes_2002_dc (4 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: DATA all
+
+
+NOTE: Read 4 rows from crimes_2000_dc.
+NOTE: Read 8 rows from crimes_2001_dc.
+NOTE: Read 12 rows from crimes_2002_dc.
+NOTE: Wrote all (12 rows, 4 columns).
+NOTE: DATA elapsed:
+  wall  0.00 seconds
+  cpu   0.00 seconds
+NOTE: PROC FREQ
+NOTE: ODS plot written: freq_mosaic_offense_method.spec.json
+NOTE: ODS plot written: freq_mosaic_ui_event_event.spec.json
+NOTE: ODS plot written: freq_mosaic_event_offense.spec.json
+NOTE: ODS plot written: freq_mosaic_offense_method.spec.json
+NOTE: PROC FREQ statement used.

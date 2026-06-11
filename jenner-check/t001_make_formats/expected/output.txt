@@ -1,0 +1,10 @@
+                           Sample crime events with NeighborhoodInfoDC Police formats applied                           
+
+UI crime event  Geocoding status   MPD tour of duty
+  Homicide/gun  Geocoded          Day (7a-3p)
+ Robbery/knife  Geocoded          Evening (3p-11p)
+    Burglary/1  Unmatched         Midnight (11p-7a)
+       Theft/1  Geocoded          Day (7a-3p)
+         Arson  Geocoded          Evening (3p-11p)
+Assault/simple  Unmatched         Midnight (11p-7a)
+

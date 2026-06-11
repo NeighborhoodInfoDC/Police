@@ -1,0 +1,8 @@
+{
+  "bundle": "t002_macro_offense_to_event",
+  "source_file": "Macros/Offense_to_event.sas",
+  "source_blob_sha": "004cd19092cc638982e572b5a2773eae5e3b7f6f",
+  "source_commit": "000eae99ac96a4ae38ea33eb9fd609e455a73fd0",
+  "tier": "macro_caller",
+  "notes": "%Offense_to_event autocall macro reproduced verbatim; caller maps a sample of MPD offense/method strings to MPD + UI event codes via PROPCASE + IF/THEN, then PROC PRINT/FREQ. warn_put shim supplied in autoexec."
+}
