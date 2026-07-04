@@ -35,7 +35,7 @@
 
 
 /** Update with information on latest file revision **/
-%let revisions = %str(Updated with data through 2024.);
+%let revisions = %str(Create summary data sets for Geo2020, Anc2023, Psa2019.);
 
 /** Update with latest crime data year **/
 %let end_yr = 2024;
@@ -87,7 +87,7 @@
     where &start_yr <= reportdate_yr <= &end_yr;
     
   run;
-
+  
   ** Convert data to single obs. per geographic unit & year **;
 
   proc summary data=All_crimes nway completetypes;
@@ -96,6 +96,7 @@
     var &sum_vars;
     output out=All_crimes_geo sum=;
     format &geo &geofmt;
+  run;
 
   %** Do not add population var for block-level summaries **;
 
@@ -106,11 +107,13 @@
     data All_crimes_geo;
     
       merge 
-        All_crimes_geo 
+        All_crimes_geo (in=in_crimes)
         Ncdb.Ncdb_sum&geosuf (keep=&geo TotPop_2000)
         Ncdb.Ncdb_sum_2010&geosuf (keep=&geo TotPop_2010)
         Ncdb.Ncdb_sum_2020&geosuf (keep=&geo TotPop_2020);
       by &geo;
+      
+      if in_crimes;
       
       if reportdate_yr <= 2000 then 
         Crime_rate_pop = TotPop_2000;
@@ -173,10 +176,8 @@
     drop i;
 
 	/* Need to remove MD and VA tracts from tract files */
-	%if &geo = GEO2000 or &geo = GEO2010 %then %do;
-	st = substr(&geo.,1,2);
-	if st="11";
-	drop st;
+	%if &geo = GEO2000 or &geo = GEO2010 or &geo = GEO2020 %then %do;
+	  if &geo =: '11';
 	%end;
     
   run;
@@ -190,7 +191,8 @@
     /** Metadata parameters **/
     revisions=%str(&revisions),
     /** File info parameters **/
-    printobs=0
+    printobs=0,
+    contents=N
   )
 
   %exit_macro:
@@ -202,24 +204,34 @@
 
 *options mlogic;
 
+
 %Crimes_sum_geo( geo=ANC2002, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ANC2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=ANC2023, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=CLUSTER_TR2000, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=geo2000, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=geo2010, end_yr=&end_yr, revisions=&revisions )
-/*** NEED TO CREATE NCDB SUMMRY FILES FOR GEO2020 *** %Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions ) ****/
+%Crimes_sum_geo( geo=geo2020, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=GEOBLK2020, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=PSA2004, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=PSA2012, end_yr=&end_yr, revisions=&revisions )
+%Crimes_sum_geo( geo=PSA2019, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=ward2002, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ward2012, end_yr=&end_yr, revisions=&revisions )
 %Crimes_sum_geo( geo=ward2022, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=ZIP, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=voterpre2012, end_yr=&end_yr, revisions=&revisions )
+
+%Crimes_sum_geo( geo=EOR, end_yr=&end_yr, revisions=&revisions )
+
 %Crimes_sum_geo( geo=city, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=bridgepk, end_yr=&end_yr, revisions=&revisions )
-%Crimes_sum_geo( geo=cluster2017, end_yr=&end_yr, revisions=&revisions )
 
 run;
 
