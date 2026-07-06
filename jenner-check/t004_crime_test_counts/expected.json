@@ -1,0 +1,20 @@
+{
+  "_captured_at": "2026-06-11T18:03:05.572208Z",
+  "_captured_run_id": "r_019eb7d8306f7f80b8b5e1e3dbd9e9c6",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Option OBS changed to 100.",
+    "NOTE: DATA tcap1998",
+    "NOTE: Processing inline DATALINES (5 lines)",
+    "NOTE: Read 5 rows from DATALINES."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}

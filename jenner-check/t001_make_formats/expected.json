@@ -1,0 +1,20 @@
+{
+  "_captured_at": "2026-06-11T18:03:05.383873Z",
+  "_captured_run_id": "r_019eb7d5bd137921a3837631199546fc",
+  "status": "ok",
+  "exit_code": 0,
+  "log_contains": [
+    "NOTE: Option OBS changed to 100.",
+    "NOTE: PROC FORMAT library=WORK",
+    "NOTE: FORMAT $av_stat defined (2 ranges).",
+    "NOTE: FORMAT uievent defined (16 ranges)."
+  ],
+  "log_does_not_contain": [
+    "ERROR:",
+    "[JENNER-ERROR"
+  ],
+  "diagnostics": {
+    "parse_warnings": [],
+    "runtime_warnings": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "bundle": "t001_make_formats",
+  "source_file": "Prog/Make_formats.sas",
+  "source_blob_sha": "8e3afa3d08e964ec102e0dfd74dd89b471fb9085",
+  "source_commit": "000eae99ac96a4ae38ea33eb9fd609e455a73fd0",
+  "tier": "real_data",
+  "notes": "PROC FORMAT VALUE statements from the Police format catalog (av_stat, uievent, uievsum, shift); demo applies them via PROC PRINT. include/DCData_lib stripped; catalog written to WORK."
+}

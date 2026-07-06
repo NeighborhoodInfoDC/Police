@@ -1,0 +1,8 @@
+{
+  "bundle": "t005_juvenile_arrests_recode",
+  "source_file": "Prog/Juvenile_arrests_2006.sas",
+  "source_blob_sha": "9c1e54cf379ad0ede826a8e7be8ef9fad4ef9917",
+  "source_commit": "000eae99ac96a4ae38ea33eb9fd609e455a73fd0",
+  "tier": "real_data",
+  "notes": "DATA-step recoding of CJIS juvenile-arrest records: yymmdd8./yymmdd10./time8. informat conversions, put/input/z2. geography recode, age-at-arrest calc, mmddyy10./time5. display formats. XML libname replaced with inline sample; File_info replaced with PROC PRINT."
+}

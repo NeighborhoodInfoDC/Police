@@ -1,0 +1,8 @@
+{
+  "bundle": "t003_offense_method_freq",
+  "source_file": "Prog/Offense_method.sas",
+  "source_blob_sha": "56de2b499b91b7dc22d70f49839934103175dcad",
+  "source_commit": "000eae99ac96a4ae38ea33eb9fd609e455a73fd0",
+  "tier": "real_data",
+  "notes": "SET concatenation of per-year Crimes_*_dc samples + PROC FREQ two-way and four-way LIST cross-tabulations of offense*method and ui_event*event*offense*method."
+}
